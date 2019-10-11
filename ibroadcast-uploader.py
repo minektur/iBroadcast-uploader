@@ -40,6 +40,7 @@ class Uploader(object):
         except ValueError, e:
             print 'Login failed: %s' % e
             return
+        self.files = []
         self.load_files()
         if self.confirm():
             self.upload()
@@ -102,7 +103,6 @@ class Uploader(object):
         if not directory:
             directory = os.getcwd()
 
-        self.files = []
         for full_filename in glob.glob(os.path.join(directory, '*')):
             filename = os.path.basename(full_filename)
             # Skip hidden files.
@@ -178,10 +178,12 @@ class Uploader(object):
         Go and perform an upload of any files that haven't yet been uploaded
         """
         self.__load_md5()
-
+        fcount=len(self.files)
+        ccount=1
         for filename in self.files:
 
-            print 'Uploading ', filename
+            print "%d / %d" %(ccount,fcount), 'Uploading ', filename
+            ccount+=1
 
             # Get an md5 of the file contents and compare it to whats up
             # there already
